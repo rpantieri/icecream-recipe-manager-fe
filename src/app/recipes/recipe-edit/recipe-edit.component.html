@@ -1,0 +1,77 @@
+<h3>Recipe</h3>
+<form (ngSubmit)="onSubmit()" [formGroup]="recipeForm">
+    <div class="p-fluid">
+        <div class="p-field p-grid">
+            <label for="name" [class]="getLabelClasses()">Name</label>
+            <div [class]="getInputClasses()">
+                <input type="text" pInputText formControlName="name" #nameinput>
+                <span class="help-class" *ngIf="checkNotValidValue('name')">Please enter a
+                    name</span>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="p-field p-grid">
+    <p-table [value]="ingredients">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>{{'INGREDIENT_EDIT.INGREDIENT' | translate}}</th>
+                <th>{{'RECIPE_EDIT.AMOUNT' | translate}}</th>
+                <th>{{'INGREDIENT_EDIT.SUGARS' | translate}}</th>
+                <th>{{'INGREDIENT_EDIT.FATS' | translate}}</th>
+                <th>{{'INGREDIENT_EDIT.SML' | translate}}</th>
+                <th>{{'INGREDIENT_EDIT.OTHER' | translate}}</th>
+                <th>{{'INGREDIENT_EDIT.TOT' | translate}}</th>
+                <th>{{'INGREDIENT_EDIT.WATER' | translate}}</th>
+                <th>{{'INGREDIENT_EDIT.PAC' | translate}}</th>
+                <th>{{'INGREDIENT_EDIT.POD' | translate}}</th>
+                <th>{{'INGREDIENT_EDIT.COST' | translate}}</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-dropdown [options]="row.ingredients" [(ngModel)]="row.ingredient" optionLabel="name"
+                                [filter]="true">
+                            </p-dropdown>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{row.ingredient.name}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" [(ngModel)]="row.amount" required>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{row.amount}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>{{((row.ingredient.sugars * row.amount)/100)}}</td>
+                <td>{{((row.ingredient.fats * row.amount)/100)}}</td>
+                <td>{{((row.ingredient.sml * row.amount)/100)}}</td>
+                <td>{{((row.ingredient.otherSolids * row.amount)/100)}}</td>
+                <td></td>
+                <td>{{((row.ingredient.water * row.amount)/100)}}</td>
+                <td>{{((row.ingredient.pac * row.amount)/100)}}</td>
+                <td>{{((row.ingredient.pod * row.amount)/100)}}</td>
+                <td>{{((row.ingredient.cost * row.amount)/100)}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<div class="p-field p-grid">
+    <p-button icon="pi pi-plus" iconPos="left" (click)="addRow()" label="Add"></p-button>
+</div>
+<div class="p-field p-grid">
+    <p-button class="p-p-10" icon="pi pi-save" iconPos="left" (click)="save($event)"
+        [disabled]="!recipeForm.valid && ingredients.length >0  " label="Save">
+    </p-button>
+    <p-button class="p-p-10" icon="pi pi-times" iconPos="left" label="Delete"></p-button>
+    <p-confirmPopup></p-confirmPopup>
+</div>

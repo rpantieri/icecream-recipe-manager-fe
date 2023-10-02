@@ -1,0 +1,48 @@
+{
+  "AUTH": {
+    "EMAIL": "Email",
+    "LOGIN": "Login",
+    "PASSWORD": "Password",
+    "PASSWORD_REPEAT": "Repeat password",
+    "PSW": {
+      "ATLEAST_1LOWER": "At least one lowercase",
+      "ATLEAST_1NUMERIC": "At least one numeric",
+      "ATLEAST_1UPPER": "At least one uppercase",
+      "ENTER_A_PSW": "Enter a password",
+      "MIN_8CHARS": "Minimum 8 characters",
+      "PICK_A_PSW": "Pick a password",
+      "SUGGESTIONS": "Suggestions"
+    },
+    "REGISTER": "Sign-in",
+    "REGISTRATION_CODE": "Registration code",
+    "USERNAME": "Username",
+    "VERIFY_REGISTRATION": "Verify registration"
+  },
+  "HEADER": {
+    "INGREDIENTS": "Ingredients",
+    "RECIPES": "Recipies"
+  },
+  "INGREDIENT_EDIT": {
+    "COST": "Cost per Kg",
+    "FATS": "Fats",
+    "INGREDIENT": "Ingredient",
+    "NAME": "Name",
+    "OTHER": "Other solids",
+    "PAC": "PAC",
+    "POD": "POD",
+    "SML": "SML",
+    "SUGARS": "Sugars",
+    "TOT": "Solids total",
+    "UNIT": "Unit",
+    "WATER": "Water"
+  },
+  "RECIPE_EDIT": {
+    "AMOUNT": "Amount (gr)"
+  },
+  "primeng": {
+    "medium": "Medium",
+    "passwordPrompt": "Enter a password",
+    "strong": "Strong",
+    "weak": "Weak"
+  }
+}

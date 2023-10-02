@@ -1,0 +1,20 @@
+<div class="p-grid h-100">
+    <div class="p-col-12">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <p-button icon="pi pi-plus" iconPos="right" (click)="newButton()"></p-button>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-2">
+                <p-listbox [options]="recipes" [(ngModel)]="selectedRecipe" optionLabel="name" (onChange)="onChange()"
+                    [listStyle]="{'height':'100%'}" [filter]="true">
+
+                </p-listbox>
+            </div>
+            <div class="p-col-10">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>
