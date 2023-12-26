@@ -1,84 +1,120 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 import { ConfirmationService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { IngredientDTO } from 'src/app/shared/dto/ingredientDTO.model';
 import { RecipeDTO } from 'src/app/shared/dto/recipeDTO.model';
 import { RecipeIngredientDTO } from 'src/app/shared/dto/recipeIngredientDTO.model';
 import * as RecipesActions from '../store/recipes.action';
+import { ingredientFeature } from 'src/app/ingredients/store/ingredients.reducer';
+import { recipesFeature } from 'src/app/recipes/store/recipes.reducer';
+import { copyObject } from 'src/app/shared/utils';
 
-interface Item {
-  name: string | undefined;
-}
 
 interface RowItem {
   amount: number;
   ingredient: IngredientDTO;
-  ingredients: IngredientDTO[];
+  ingredientId: number;
+}
+
+interface Total {
+  amount: number;
+  sugars: number;
+  fats: number;
+  sml: number;
+  otherSolids: number;
+  totSolids: number;
+  water: number;
+  pac: number;
+  pod: number;
+  cost: number;
 }
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styles: [
-  ]
+  ],
+  providers : [ConfirmationService]
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
 
   subscription?: Subscription;
-  recipeForm: UntypedFormGroup;
 
-  storeSelectedRecipe: RecipeDTO | null = null;
+  actualRecipeName: string = " ";
+  actualRecipeId: number = NaN;
+  actualRecipeValid: boolean = false;
+
+  
   ingredients: RowItem[] = [];
+  totArray: Total[] = [];
+  ingredientList: IngredientDTO[] = [];
+  ingredientMap: Map<number,IngredientDTO> = new Map();
+  ingredientListSub:Subscription | undefined;
 
   constructor(private store: Store, private confirmationService: ConfirmationService) {
-    this.recipeForm = new UntypedFormGroup({
-      'name': new UntypedFormControl(null, Validators.required)
-    });
 
-   /* this.subscription = this.store
-      .select('recipes')
-      .pipe(map(duplicatesState => duplicatesState.selectedRecipe))
-      .subscribe(i => {
-        this.storeSelectedRecipe = i;
-        let n: Item = this.storeSelectedRecipe != null ? { name: this.storeSelectedRecipe?.name } : { name: '' };
-        this.ingredients = (this.storeSelectedRecipe && this.storeSelectedRecipe.ingredients) ?
-          this.storeSelectedRecipe.ingredients.map<RowItem>(i => {
-            let idto: IngredientDTO | undefined | null = ingredientService.getIngredient(i.ingredientId);
-            if (!idto) idto = new IngredientDTO();
-            let ri: RowItem = { amount: i.amount, ingredient: idto, ingredients: ingredientService.getIngredients() };
-            return ri;
-          }) : [];
-        this.recipeForm.get('name')?.setValue(n.name);
-      });*/
+
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) this.subscription.unsubscribe();
+    if (this.ingredientListSub) this.ingredientListSub.unsubscribe();
   }
 
   ngOnInit(): void {
-    this.initForm();
+    this.ingredientListSub = this.store
+    .pipe(select(ingredientFeature.selectIngredients))
+      .subscribe((ii: IngredientDTO[]) => {
+        console.log('recipe edit component: setting ingredient dto list');
+        let ia: IngredientDTO[] = [];
+        this.ingredientMap.clear();
+        let newI:IngredientDTO;
+        ii.forEach(element => {
+          newI = new IngredientDTO();
+          copyObject(element, newI);
+          ia.push(newI);
+          this.ingredientMap.set(newI.id, newI);
+        });
+        this.ingredientList = ia;
+      });
+    this.subscription = this.store
+      .pipe(select(recipesFeature.selectSelectedRecipe))
+        .subscribe((r : RecipeDTO | null ) => {
+          console.log('recipe edit component: setting ingredient dto list');
+          this.actualRecipeName = r?.name ? r?.name : "";
+          this.actualRecipeId = r?.id ? r.id : NaN;
+          let ii:RowItem[] = [];
+          r?.ingredients.forEach(x => {
+            ii.push({ amount: x.amount, ingredient: this.ingredientMap.has(x.ingredientId) ? this.ingredientMap.get(x.ingredientId)! : new IngredientDTO(), ingredientId: x.ingredientId });
+          });
+          this.ingredients = ii;
+          this.checkTot();
+        });
   }
 
-  getLabelClasses(): String {
-    return "p-col-12 p-mb-2 p-md-2 p-mb-md-0";
-  }
-  getInputClasses(): String {
-    return "p-col-12 p-md-10";
-  }
-
-  checkNotValidValue(name: string): boolean {
-    let c: AbstractControl | null = this.recipeForm.get(name);
-    return c != null && c.touched && !c.valid;
-  }
-
-  private initForm(): void {
-
-  }
 
   addRow(): void {
-    const ii: RowItem = { amount: 1, ingredient: new IngredientDTO(), ingredients: [] };
+    const ii: RowItem = { amount: 0, ingredient: new IngredientDTO(), ingredientId: NaN };
     console.log(ii);
-    this.ingredients = [...this.ingredients, { amount: 1, ingredient: new IngredientDTO(), ingredients: [] }];
+    this.ingredients = [...this.ingredients, ii];
+  }
+
+  checkTot(): void{
+    let t:Total = {amount:0, sugars:0, fats: 0, sml: 0, otherSolids : 0, totSolids : 0, water : 0,pac: 0, pod : 0, cost:0}
+    this.ingredients.forEach(x =>{
+      t.amount = t.amount +x.amount
+      t.sugars = t.sugars + x.amount * x.ingredient.sugars / 100;
+      t.fats = t.fats + x.amount * x.ingredient.fats / 100;
+      t.sml = t.sml + x.amount * x.ingredient.sml / 100;
+      t.otherSolids = t.otherSolids + x.amount * x.ingredient.otherSolids / 100;
+      t.totSolids = t.totSolids + x.amount * x.ingredient.totSolids / 100;
+      t.water = t.water + x.amount * x.ingredient.water / 100;
+      t.pac = t.pac + x.amount * x.ingredient.pac / 100;
+      t.pod = t.pod + x.amount * x.ingredient.pod / 100;
+      t.cost = t.cost + x.amount * x.ingredient.cost  / 100;
+    })
+    this.totArray = [t];
   }
 
   save(event: Event) {
@@ -96,22 +132,29 @@ export class RecipeEditComponent implements OnInit {
     });
   }
 
+  onChange(): void{
+    this.actualRecipeValid = this.actualRecipeName != null && this.actualRecipeName.trim().length > 0 && this.ingredients.length>0;
+    this.ingredients.forEach( x =>{
+      this.actualRecipeValid = this.actualRecipeValid && x.ingredient !=null && x.amount > 0;
+    });
+    
+  }
+
   onSubmit(): void {
-    if (this.storeSelectedRecipe == null) {
+    if (!this.actualRecipeValid) {
       alert("no actual selected recipe");
       return;
     }
-    let item: Item = this.recipeForm.value;
     let i: RecipeDTO = new RecipeDTO();
-    Object.assign(i, this.storeSelectedRecipe);
-    Object.assign(i, item);
+    i.name = this.actualRecipeName;
+    i.id = this.actualRecipeId;
     i.ingredients = this.ingredients.map(x => {
       let i: RecipeIngredientDTO = new RecipeIngredientDTO();
       i.amount = x.amount;
       i.ingredientId = x.ingredient.id;
       return i;
     });
-    if (isNaN(this.storeSelectedRecipe.id)) {
+    if (isNaN(this.actualRecipeId)) {
       console.log("dispatching saving new recipe", i);
       this.store.dispatch(RecipesActions.SAVE_NEW_RECIPE({ recipe: i }));
     } else {

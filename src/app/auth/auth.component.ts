@@ -10,56 +10,60 @@ import { authFeature } from './store/auth.reducer';
   selector: 'app-auth.component',
   template: `
     <div
-      class="flex flex-row w-full h-full  bg-center bg-blue-100 align-items-center justify-content-center"
-      style="background-image: url('./assets/images/icecream-background.png');"
+      class="align-items-center d-flex h-100 justify-content-center w-auto"
     >
-      <div class="bg-blue-400 m-3 p-4 border-round-2xl">
-        <div class="field">
-          <label for="username" class="block">{{
-            'AUTH.USERNAME' | translate
-          }}</label>
-          <input
-            id="username"
-            type="text"
-            pInputText
-            #USERNAME
-            [placeholder]="'AUTH.USERNAME' | translate"
-          />
+      <div class="p-4 text-bg-secondary border rounded" (keyup.enter)="login(USERNAME.value, PASSWORD.value)">
+        <div class="row p-2">
+          <div class="col-3 "><div class="row h-100 justify-content-end align-items-center">{{ 'AUTH.USERNAME' | translate }}</div></div>
+          <div class="col-9">
+            <input
+              id="username"
+              type="text"
+              pInputText
+              #USERNAME
+              [placeholder]="'AUTH.USERNAME' | translate"
+            />
+          </div>
         </div>
-        <div class="field">
-          <label for="password" class="block">{{
-            'AUTH.PASSWORD' | translate
-          }}</label>
-          <input
-            id="password"
-            type="password"
-            pInputText
-            #PASSWORD
-            [placeholder]="'AUTH.PASSWORD' | translate"
-          />
+        <div class="row p-2">
+          <div class="col-3 "><div class="row h-100 justify-content-end align-items-center">{{ 'AUTH.PASSWORD' | translate }}</div></div>
+          <div class="col-9">
+            <input
+              id="password"
+              type="password"
+              pInputText
+              #PASSWORD
+              [placeholder]="'AUTH.PASSWORD' | translate"
+            />
+          </div>
         </div>
-        <div class="field">
-          <p-button (click)="login(USERNAME.value, PASSWORD.value)">{{
-            'AUTH.LOGIN' | translate
-          }}</p-button>
-          <button
-            pButton
-            type="button"
-            [label]="'AUTH.REGISTER' | translate"
-            class="p-button-link"
-            (click)="register()"
-          ></button>
-          <button
-            pButton
-            type="button"
-            [label]="'AUTH.VERIFY_REGISTRATION' | translate"
-            class="p-button-link"
-            (click)="verifyRegistration()"
-          ></button>
+        <div class="row p-2">
+          <div class="col-3"></div>
+          <div class="col-9"><button (click)="login(USERNAME.value, PASSWORD.value)" class="btn btn-primary btn-lg">{{'AUTH.LOGIN' | translate}}</button></div>
         </div>
-        <div><app-language-dropdown></app-language-dropdown></div>
+        <div class="row p-2 row-cols-3">
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-link link-light btn-lg"
+                  (click)="register()"
+                  >{{'AUTH.REGISTER' | translate}}
+                </button>
+              </div>
+              <div>
+              <button
+                  type="button"
+                  class="btn btn-link link-light btn-lg"
+                  (click)="verifyRegistration()"
+                  >{{'AUTH.VERIFY_REGISTRATION' | translate}}
+                </button>
+              </div>
+              <div>
+                <app-language-dropdown></app-language-dropdown>
+              </div>
+            
+        </div>
       </div>
-      <p-toast position="center" severity="error" key="error"></p-toast>
     </div>
   `,
   styles: [''],
@@ -73,17 +77,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.subscription = this.store
-      .pipe(select(authFeature.selectSession))
-      .subscribe((session) => {
-        if (session != null && session.length > 0) {
-          console.log('session changed' + session);
-          this.router.navigate(['recipes']);
-        }
-      });
+
     this.subscriptionError = this.store
       .pipe(select(authFeature.selectRegisterError))
       .subscribe((error) => {

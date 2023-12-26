@@ -1,6 +1,9 @@
-<div class="card w-full p-0 h-full m-0" >
+<div class="d-flex flex-column w-100 p-0 h-100 m-0" >
+    <p-toast position="top-left" key="tl"></p-toast>
     <app-header *ngIf="showHeader"></app-header>
-    <div class="w-full h-full m-0 p-0">
+    <div class="flex-grow-1">
         <router-outlet></router-outlet>
     </div>
+    
+    
 </div>

@@ -1,20 +1,21 @@
-<div class="p-grid h-100">
-    <div class="p-col-12">
-        <div class="p-grid">
-            <div class="p-col-12">
-                <p-button icon="pi pi-plus" iconPos="right" (click)="newButton()"></p-button>
-            </div>
-        </div>
-        <div class="p-grid">
-            <div class="p-col-2">
-                <p-listbox [options]="recipes" [(ngModel)]="selectedRecipe" optionLabel="name" (onChange)="onChange()"
-                    [listStyle]="{'height':'100%'}" [filter]="true">
+<div class="row h-100 w-100">
+    <div class="col-2 h-100" >
+        <div class="d-flex h-100 w-100 flex-column">
+            
+            <div class="h-100 w-100 m-2">
+                <p-listbox [options]="recipes" [(ngModel)]="selectedRecipe" optionLabel="name" (ngModelChange)="onChange()" dataKey="id"
+                [style]="{ 'height' : '100%'}"  [listStyle]="{ 'max-height' : '2000px'}" [filter]="true">
 
                 </p-listbox>
             </div>
-            <div class="p-col-10">
+        </div>
+        
+    </div>
+    <div class="col-10 position-relative h-100" >
+            <div class="position-absolute top-0 end-0"><p-button icon="pi pi-plus" [rounded]="true" severity="secondary" (click)="newButton()"></p-button></div>
+            <div class="w-100 h-100">
                 <router-outlet></router-outlet>
             </div>
-        </div>
+        
     </div>
 </div>

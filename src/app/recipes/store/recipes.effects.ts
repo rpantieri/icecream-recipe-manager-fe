@@ -45,7 +45,7 @@ export class RecipesEffects {
         exhaustMap((action) => {
             console.log('updating recipe: ', action.recipe);
             return this.http.put<RecipeDTO>(
-                'http://localhost:8080/recipe/' + action.recipe.id, action.recipe
+                'http://localhost:8080/recipe/', action.recipe
             ).pipe(
                 map(recipe => {
                     console.log('updated recipe:', recipe);

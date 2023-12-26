@@ -45,7 +45,7 @@ export class IngredientsEffects {
         exhaustMap((action) => {
             console.log('updating ingredient: ', action.ingredient);
             return this.http.put<IngredientDTO>(
-                environment.baseUrl + 'ingredient/' + action.ingredient.id, action.ingredient
+                environment.baseUrl + 'ingredient/' , action.ingredient
             ).pipe(
                 map(ingredient => {
                     console.log('updated ingredient:', ingredient);

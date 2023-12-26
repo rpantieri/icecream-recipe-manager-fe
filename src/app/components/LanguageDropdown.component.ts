@@ -11,8 +11,8 @@ import { LangService } from '../shared/lang.service';
       (onChange)="onChange()"
     >
       <ng-template pTemplate="selectedItem">
-        <div class="flex flex-row" *ngIf="selectedCountry">
-          <div class="flex pr-3">
+        <div class="d-flex flex-row" *ngIf="selectedCountry">
+          <div class="p-1">
             <img
               [src]="
                 './assets/images/flags/' +
@@ -22,12 +22,12 @@ import { LangService } from '../shared/lang.service';
               style="width: 17px;"
             />
           </div>
-          <div class="flex">{{ selectedCountry.code }}</div>
+          <div class="p-1">{{ selectedCountry.code }}</div>
         </div>
       </ng-template>
       <ng-template let-country pTemplate="item">
-        <div class="flex flex-row">
-          <div class="flex pr-3">
+        <div class="d-flex flex-row">
+          <div class="p-1">
             <img
               [src]="
                 './assets/images/flags/' + country.code.toLowerCase() + '.svg'
@@ -35,7 +35,7 @@ import { LangService } from '../shared/lang.service';
               style="width: 17px;"
             />
           </div>
-          <div class="flex">{{ country.code }}</div>
+          <div class="p-1">{{ country.code }}</div>
         </div>
       </ng-template>
     </p-dropdown>

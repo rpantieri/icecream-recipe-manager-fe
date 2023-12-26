@@ -1,37 +1,23 @@
-import { Injectable } from '@angular/core';
-import {
-    ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree
-} from '@angular/router';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { authFeature} from './store/auth.reducer';
+import { environment } from 'src/environments/environment';
 
 
-@Injectable({ providedIn: 'root' })
-export class AuthGuard implements CanActivate {
-    constructor(
-        private router: Router,
-        private store: Store
-    ) { }
-
-    canActivate(
-        route: ActivatedRouteSnapshot,
-        router: RouterStateSnapshot
-    ):
-        | boolean
-        | UrlTree
-        | Promise<boolean | UrlTree>
-        | Observable<boolean | UrlTree> {
-        return this.store.select(authFeature.selectSession).pipe(
-            take(1),
-            map(session => {
-                const isAuth = session != null && session.length > 0;
-                if (isAuth) {
-                    return true;
-                }
-                return this.router.createUrlTree(['/auth']);
-            })
-        );
-    }
+export const authGuard = () => {
+    const router: Router = inject(Router);
+    const store: Store = inject(Store);
+    return store.select(authFeature.selectAccess_token).pipe(
+        take(1),
+        map(access_token => {
+            const isAuth = access_token != null && access_token.length > 0;
+            if (isAuth || environment.dev_token) {
+                return true;
+            }
+            console.log('no AUTH redirecting to auth page');
+            return router.createUrlTree(['/auth']);
+        })
+    );
 }

@@ -22,7 +22,7 @@ export const LOGIN_FAILED = createAction(
 
 export const LOGIN_SUCCESS = createAction(
   '[AUTH] LOGIN_SUCCESS',
-  props<{ username: string; session: string }>()
+  props<{ username: string; access_token: string }>()
 );
 
 export const REGISTER_SUCCESS = createAction('[AUTH] REGISTER_SUCCESS');
@@ -45,3 +45,5 @@ export const VERIFY_REGISTRATION = createAction(
 export const VERIFY_REGISTRATION_SUCCESS = createAction(
   '[AUTH] VERIFY_REGISTRATION_SUCCESS'
 );
+
+export const REQUEST_NEW_LOGIN = createAction('[AUTH] REQUEST_NEW_LOGIN');

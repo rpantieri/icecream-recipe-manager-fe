@@ -1,12 +1,13 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import * as AuthAction from './auth.action';
+import { environment } from 'src/environments/environment';
 
 export const AUTH_KEY = 'auth';
 
 export interface State {
   username: string;
   authError: string;
-  session: string;
+  access_token: string;
   registerError: string;
   verifyRegistration: boolean;
 }
@@ -14,7 +15,7 @@ export interface State {
 const initialState: State = {
   username: '',
   authError: '',
-  session: '',
+  access_token: environment.dev_token,
   registerError: '',
   verifyRegistration: false,
 };
@@ -33,7 +34,7 @@ export const authFeature = createFeature({
     }),
     on(AuthAction.LOGIN_SUCCESS, (state, action) => {
       console.log('login success');
-      return { ...state, session: action.session };
+      return { ...state, access_token: action.access_token };
     }),
     on(AuthAction.REGISTER_SUCCESS, (state, action) => {
       console.log('register success');
@@ -66,6 +67,10 @@ export const authFeature = createFeature({
     on(AuthAction.VERIFY_REGISTRATION_SUCCESS, (state) => {
       console.log('VERIFY_REGISTRATION_SUCCESS');
       return { ...state, verifyRegistration: false };
+    }),
+    on(AuthAction.REQUEST_NEW_LOGIN, (state) => {
+      console.log('REQUEST_NEW_LOGIN');
+      return { ...state, access_token: '' };
     })
   ),
 });

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-header',
@@ -7,24 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  menuItems: MenuItem[];
+  menuItems: MenuItem[] | undefined;
 
-  selectedItem: MenuItem;
+  selectedItem: MenuItem | undefined;
 
-  constructor() {
-    this.menuItems = [
-      { name: 'i', descr: 'Ingredients' },
-      { name: 'r', descr: 'Recipes' },
-    ];
-    this.selectedItem = this.menuItems[0];
+  constructor(private translateService: TranslateService) {
+    
   }
 
   ngOnInit(): void {
+    this.translateService.get('HEADER.INGREDIENTS').subscribe(()=>{
+      this.menuItems = [
+        { label:  this.translateService.instant('HEADER.INGREDIENTS'), routerLink:['/ingredients']},
+        { label:  this.translateService.instant('HEADER.RECIPES'), routerLink:['/recipes']}
+      ];
+    });
+    
+    
   }
 
-}
-
-interface MenuItem {
-  name: string,
-  descr: string
 }

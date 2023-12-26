@@ -1,14 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IngredientDTO } from '../shared/dto/ingredientDTO.model';
 import * as IngredientActions from './store/ingredients.action';
 import { ingredientFeature } from './store/ingredients.reducer';
+import { NgModel } from '@angular/forms';
+import { Listbox } from 'primeng/listbox';
 @Component({
   selector: 'app-ingredients',
   templateUrl: './ingredients.component.html',
-  styles: ['']
+  styles: ['.customListStyleClass {height : 100%;}']
 })
 export class IngredientsComponent implements OnInit, OnDestroy {
 
@@ -17,21 +19,28 @@ export class IngredientsComponent implements OnInit, OnDestroy {
   subscription: Subscription | undefined;
   subscriptionSelection: Subscription | undefined;
 
+
   constructor(private store: Store, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.subscription = this.store
     .pipe(select(ingredientFeature.selectIngredients))
       .subscribe((ii: IngredientDTO[]) => {
+        console.log('ingredients component: setting ingredient list');
         this.ingredients = ii;
       });
     this.subscriptionSelection = this.store
     .pipe(select(ingredientFeature.selectSelectedIngredient))
       .subscribe((i: IngredientDTO | null) => {
+        console.log('ingredients component: setting new selected ingredient',i);
         this.selectedIngredient = i == null || isNaN(i.id) ? null : i;
       });
     this.store.dispatch(IngredientActions.RESET_SELECTED_INGREDIENT());
+
+    
   }
+
+  
 
   onChange() {
     console.log("detect list ingredient change, new item:" + this.selectedIngredient);

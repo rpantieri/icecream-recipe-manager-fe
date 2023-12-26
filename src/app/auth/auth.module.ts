@@ -33,8 +33,8 @@ import { authFeature } from './store/auth.reducer';
     CardModule,
     TranslateModule,
     ToastModule,
-    StoreModule.forFeature(authFeature),
-    EffectsModule.forFeature(AuthEffects),
+    StoreModule,
+    EffectsModule,
     MessagesModule,
   ],
 })

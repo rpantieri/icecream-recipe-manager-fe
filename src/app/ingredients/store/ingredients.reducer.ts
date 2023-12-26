@@ -25,7 +25,8 @@ export const ingredientFeature=createFeature({
     }),
     on(IngredientAction.SET_DTO_LIST, (state, action) => {
         console.log('set dto list reducer');
-        return { ...state, ingredients: action.list };
+        let ii:IngredientDTO[] = action.list.map( x => IngredientDTO.copyFromProxy(x));
+        return { ...state, ingredients: ii };
     }),
     on(IngredientAction.EDIT_INGREDIENT, (state, action) => {
         console.log('edit ingredient');

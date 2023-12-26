@@ -1,77 +1,129 @@
-<h3>Recipe</h3>
-<form (ngSubmit)="onSubmit()" [formGroup]="recipeForm">
-    <div class="p-fluid">
-        <div class="p-field p-grid">
-            <label for="name" [class]="getLabelClasses()">Name</label>
-            <div [class]="getInputClasses()">
-                <input type="text" pInputText formControlName="name" #nameinput>
-                <span class="help-class" *ngIf="checkNotValidValue('name')">Please enter a
-                    name</span>
+<div class="w-100 h-100" (ngSubmit)="onSubmit()" >
+    <div class="d-flex flex-column h-100">
+    <div class="row"><h3>Recipe</h3></div>
+    <div class="row">
+            <label for="name" [class]="">Name</label>
+            <div >
+                <input type="text" pInputText  #nameinput [(ngModel)] = "actualRecipeName" (change)="onChange()">
+            </div>
+        
+    </div>
+    <div class="row flex-grow-1" >
+        <div class="position-relative flex-grow-1">
+            <div class="position-absolute h-100 w-100">
+                <p-table   [value]="ingredients"  [scrollable]="true" scrollHeight="flex" dataKey="ingredientId" 
+                styleClass="p-datatable-striped p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <div class="">
+                            Products
+                            <p-button icon="pi pi-plus" (click)="addRow()"></p-button>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>{{'INGREDIENT_EDIT.INGREDIENT' | translate}}</th>
+                            <th>{{'RECIPE_EDIT.AMOUNT' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.SUGARS' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.FATS' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.SML' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.OTHER' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.TOT' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.WATER' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.PAC' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.POD' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.COST' | translate}}</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td [pEditableColumn]="row.ingredient" pEditableColumnField="ingredient">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="ingredientList" [(ngModel)]="row.ingredient" optionLabel="name" dataKey="id"
+                                            [filter]="true" (onChange)="onChange()">
+                                        </p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{row.ingredient.name}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="row.amount" pEditableColumnField="amount">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="row.amount" (ngModelChange)="onChange()">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{row.amount}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>{{((row.ingredient.sugars * row.amount)/100) | number : '1.0-2'}}</td>
+                            <td>{{((row.ingredient.fats * row.amount)/100) | number : '1.0-2'}}</td>
+                            <td>{{((row.ingredient.sml * row.amount)/100) | number : '1.0-2'}}</td>
+                            <td>{{((row.ingredient.otherSolids * row.amount)/100) | number : '1.0-2'}}</td>
+                            <td>{{((row.ingredient.totSolids * row.amount)/100) | number : '1.0-2'}}</td>
+                            <td>{{((row.ingredient.water * row.amount)/100) | number : '1.0-2'}}</td>
+                            <td>{{((row.ingredient.pac * row.amount)/100) | number : '1.0-2'}}</td>
+                            <td>{{((row.ingredient.pod * row.amount)/100) | number : '1.0-2'}}</td>
+                            <td>{{((row.ingredient.cost * row.amount)/100) | number : '1.0-2'}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </div>
         </div>
     </div>
-</form>
-<div class="p-field p-grid">
-    <p-table [value]="ingredients">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>{{'INGREDIENT_EDIT.INGREDIENT' | translate}}</th>
-                <th>{{'RECIPE_EDIT.AMOUNT' | translate}}</th>
-                <th>{{'INGREDIENT_EDIT.SUGARS' | translate}}</th>
-                <th>{{'INGREDIENT_EDIT.FATS' | translate}}</th>
-                <th>{{'INGREDIENT_EDIT.SML' | translate}}</th>
-                <th>{{'INGREDIENT_EDIT.OTHER' | translate}}</th>
-                <th>{{'INGREDIENT_EDIT.TOT' | translate}}</th>
-                <th>{{'INGREDIENT_EDIT.WATER' | translate}}</th>
-                <th>{{'INGREDIENT_EDIT.PAC' | translate}}</th>
-                <th>{{'INGREDIENT_EDIT.POD' | translate}}</th>
-                <th>{{'INGREDIENT_EDIT.COST' | translate}}</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-row>
-            <tr>
-                <td pEditableColumn>
-                    <p-cellEditor>
-                        <ng-template pTemplate="input">
-                            <p-dropdown [options]="row.ingredients" [(ngModel)]="row.ingredient" optionLabel="name"
-                                [filter]="true">
-                            </p-dropdown>
-                        </ng-template>
-                        <ng-template pTemplate="output">
-                            {{row.ingredient.name}}
-                        </ng-template>
-                    </p-cellEditor>
-                </td>
-                <td pEditableColumn>
-                    <p-cellEditor>
-                        <ng-template pTemplate="input">
-                            <input pInputText type="text" [(ngModel)]="row.amount" required>
-                        </ng-template>
-                        <ng-template pTemplate="output">
-                            {{row.amount}}
-                        </ng-template>
-                    </p-cellEditor>
-                </td>
-                <td>{{((row.ingredient.sugars * row.amount)/100)}}</td>
-                <td>{{((row.ingredient.fats * row.amount)/100)}}</td>
-                <td>{{((row.ingredient.sml * row.amount)/100)}}</td>
-                <td>{{((row.ingredient.otherSolids * row.amount)/100)}}</td>
-                <td></td>
-                <td>{{((row.ingredient.water * row.amount)/100)}}</td>
-                <td>{{((row.ingredient.pac * row.amount)/100)}}</td>
-                <td>{{((row.ingredient.pod * row.amount)/100)}}</td>
-                <td>{{((row.ingredient.cost * row.amount)/100)}}</td>
-            </tr>
-        </ng-template>
-    </p-table>
+    <div class="row " >
+        <div class="position-relative">
+            <div class="">
+                <p-table   [value]="totArray"  dataKey="ingredientId" 
+                styleClass="p-datatable-striped p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>{{'INGREDIENT_EDIT.INGREDIENT' | translate}}</th>
+                            <th>{{'RECIPE_EDIT.AMOUNT' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.SUGARS' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.FATS' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.SML' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.OTHER' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.TOT' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.WATER' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.PAC' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.POD' | translate}}</th>
+                            <th>{{'INGREDIENT_EDIT.COST' | translate}}</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td></td>
+                            <td>{{row.amount | number : '1.0-2'}}</td>
+                            <td>{{row.sugars | number : '1.0-2'}}</td>
+                            <td>{{row.fats | number : '1.0-2'}}</td>
+                            <td>{{row.sml | number : '1.0-2'}}</td>
+                            <td>{{row.otherSolids | number : '1.0-2'}}</td>
+                            <td>{{row.totSolids | number : '1.0-2'}}</td>
+                            <td>{{row.water | number : '1.0-2'}}</td>
+                            <td>{{row.pac | number : '1.0-2'}}</td>
+                            <td>{{row.pod | number : '1.0-2'}}</td>
+                            <td>{{row.cost | number : '1.0-2'}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+    <div class="flex-row d-flex">
+        <div class="flex-grow-1"></div>
+        <div class="">
+            <p-button class="p-p-10" icon="pi pi-save" iconPos="left" (click)="save($event)"
+                [disabled]="!actualRecipeValid" label="Save">
+            </p-button>
+        </div>
+        <div class="">
+            <p-button class="p-p-10" icon="pi pi-times" iconPos="left" label="Delete"></p-button>
+            <p-confirmPopup></p-confirmPopup>
+        </div>
+    </div>
 </div>
-<div class="p-field p-grid">
-    <p-button icon="pi pi-plus" iconPos="left" (click)="addRow()" label="Add"></p-button>
 </div>
-<div class="p-field p-grid">
-    <p-button class="p-p-10" icon="pi pi-save" iconPos="left" (click)="save($event)"
-        [disabled]="!recipeForm.valid && ingredients.length >0  " label="Save">
-    </p-button>
-    <p-button class="p-p-10" icon="pi pi-times" iconPos="left" label="Delete"></p-button>
-    <p-confirmPopup></p-confirmPopup>
-</div>
+

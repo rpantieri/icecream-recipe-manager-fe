@@ -15,6 +15,8 @@ import {ButtonModule} from 'primeng/button';
 import {ConfirmPopupModule} from 'primeng/confirmpopup';
 import { ListboxModule } from 'primeng/listbox';
 import { EffectsModule } from '@ngrx/effects';
+import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @NgModule({
@@ -24,6 +26,8 @@ import { EffectsModule } from '@ngrx/effects';
     ],
     imports: [
         RouterModule,
+        CommonModule,
+        InputTextModule,
         ReactiveFormsModule,
         IngredientsRoutingModule,
         TranslateModule,
@@ -33,8 +37,8 @@ import { EffectsModule } from '@ngrx/effects';
         ConfirmPopupModule,
         FormsModule,
         ListboxModule,
-        StoreModule.forFeature(ingredientFeature),
-        EffectsModule.forFeature(IngredientsEffects)
+        StoreModule,
+        EffectsModule
     ]
 })
 export class IngredientsModule { }

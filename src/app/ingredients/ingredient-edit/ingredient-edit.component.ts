@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { IngredientDTO } from 'src/app/shared/dto/ingredientDTO.model';
 import * as IngredientActions from '../store/ingredients.action';
 import { ingredientFeature } from '../store/ingredients.reducer';
+import { copyObject } from 'src/app/shared/utils';
 
 interface Item {
   name: string;
@@ -21,7 +22,8 @@ interface Item {
 @Component({
   selector: 'app-ingredient-edit',
   templateUrl: './ingredient-edit.component.html',
-  styles: ['']
+  styles: [''],
+  providers : [ConfirmationService]
 })
 export class IngredientEditComponent implements OnInit {
 
@@ -37,13 +39,13 @@ export class IngredientEditComponent implements OnInit {
   constructor(private store: Store, private confirmationService: ConfirmationService) {
     this.ingredientForm = new UntypedFormGroup({
       'name': new UntypedFormControl(null, Validators.required),
-      'sugars': new UntypedFormControl(null, [Validators.required, Validators.pattern(/^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$/)]),
-      'fats': new UntypedFormControl(null, [Validators.required, Validators.pattern(/^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$/)]),
-      'sml': new UntypedFormControl(null, [Validators.required, Validators.pattern(/^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$/)]),
-      'otherSolids': new UntypedFormControl(null, [Validators.required, Validators.pattern(/^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$/)]),
-      'cost': new UntypedFormControl(null, [Validators.required, Validators.pattern(/^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$/)]),
-      'pac': new UntypedFormControl(null, [Validators.required, Validators.pattern(/^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$/)]),
-      'pod': new UntypedFormControl(null, [Validators.required, Validators.pattern(/^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$/)])
+      'sugars': new UntypedFormControl(null, [Validators.required, Validators.min(0)]),
+      'fats': new UntypedFormControl(null, [Validators.required,Validators.min(0)]),
+      'sml': new UntypedFormControl(null, [Validators.required, Validators.min(0)]),
+      'otherSolids': new UntypedFormControl(null, [Validators.required, Validators.min(0)]),
+      'cost': new UntypedFormControl(null, [Validators.required, Validators.min(0)]),
+      'pac': new UntypedFormControl(null, [Validators.required, Validators.min(0)]),
+      'pod': new UntypedFormControl(null, [Validators.required, Validators.min(0)])
     });
 
     this.ingredientForm.valueChanges.subscribe((x) => {
@@ -61,21 +63,14 @@ export class IngredientEditComponent implements OnInit {
         this.storeSelectedIngredient = i;
         let n: Item = this.newItem();
         if (this.storeSelectedIngredient) {
-          IngredientEditComponent.copyMatching(this.storeSelectedIngredient, n);
+          copyObject(this.storeSelectedIngredient, n);
         }
         this.ingredientForm.setValue(n);
+        this.ingredientForm.markAsPristine();
       });
   }
 
-  static copyMatching(source: any, target: any): void {
-    if (source && target) {
-      Object.keys(target).forEach(key => {
-        if (source[key] !== undefined) {
-          target[key] = source[key];
-        }
-      });
-    }
-  }
+
 
   private newItem(): Item {
     let n: Item = { name: '', sugars: 0, fats: 0, sml: 0, otherSolids: 0, cost: 0, pac: 0, pod: 0 };
@@ -86,12 +81,6 @@ export class IngredientEditComponent implements OnInit {
     this.initForm();
   }
 
-  getLabelClasses(): String {
-    return "p-col-12 p-mb-2 p-md-2 p-mb-md-0";
-  }
-  getInputClasses(): String {
-    return "p-col-12 p-md-10";
-  }
 
   checkNotValidValue(name: string): boolean {
     let c: AbstractControl | null = this.ingredientForm.get(name);

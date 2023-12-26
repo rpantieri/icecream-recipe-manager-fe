@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -17,28 +17,24 @@ export class AuthEffects {
       ofType(AuthAction.LOGIN_START),
       exhaustMap((action) => {
         console.log('invoking login service');
+        var httpOptions:HttpHeaders = new HttpHeaders();
+        httpOptions = httpOptions.set('Authorization','Basic '+btoa(action.username+':'+action.username));
         return this.http
-          .post<ResponseMessage<LoginDTO>>(environment.baseUrl + 'auth/login', {
-            username: action.username,
-            password: action.password,
-          })
+          .post<LoginDTO>(environment.baseUrl + 'auth/login', '' ,{headers: httpOptions}
+          )
           .pipe(
             map((dto) => {
-              if (dto.hasError) {
-                console.log('error in login service call:', dto);
-                return AuthAction.LOGIN_FAILED({ message: dto.errorMessage });
-              }
               console.log('retriving login result');
               return AuthAction.LOGIN_SUCCESS({
                 username: '',
-                session: dto.result ? dto.result.sessionId : '',
+                access_token:  dto.access_token,
               });
             }),
             catchError((errirRes: HttpErrorResponse) => {
               console.log('catching error in login service', errirRes);
               return of(
                 AuthAction.LOGIN_FAILED({
-                  message: errirRes.error.errorMessage,
+                  message: errirRes.error?.errorMessage,
                 })
               );
             })
@@ -46,6 +42,16 @@ export class AuthEffects {
       })
     )
   );
+
+  navigateAfterLogin = createEffect(() =>{
+    return this.actions$.pipe(
+      ofType(AuthAction.LOGIN_SUCCESS),
+      tap(()=>{
+        console.log('navigating towards landing page');
+        this.router.navigate(['/recipes']);
+      })
+    );
+  },{dispatch : false});
 
   registerStart = createEffect(() =>
     this.actions$.pipe(
@@ -126,6 +132,15 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthAction.VERIFY_REGISTRATION_SUCCESS),
+        tap(() => this.router.navigate(['auth']))
+      ),
+    { dispatch: false }
+  );
+
+  requireNewLogin = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthAction.REQUEST_NEW_LOGIN),
         tap(() => this.router.navigate(['auth']))
       ),
     { dispatch: false }

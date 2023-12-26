@@ -1,74 +1,84 @@
 <h3>{{'INGREDIENT_EDIT.INGREDIENT' | translate}} : {{name}}</h3>
-<form (ngSubmit)="onSubmit()" [formGroup]="ingredientForm">
-    <div class="p-fluid">
-        <div class="p-field p-grid">
-            <label for="name" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.NAME' | translate}}</label>
-            <div [class]="getInputClasses()">
+<form class="h-100 w-100" (ngSubmit)="onSubmit()" [formGroup]="ingredientForm">
+    <div class="row row-cols-1">
+        <div >
+            <label for="name" [class]="">{{'INGREDIENT_EDIT.NAME' | translate}}</label>
+            <div>
                 <input type="text" pInputText formControlName="name" #nameinput>
-                <span class="help-class" *ngIf="checkNotValidValue('name')">Please enter a
-                    name</span>
             </div>
         </div>
-        <div class="p-field p-grid">
-            <label for="sugars" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.SUGARS' | translate}}</label>
-            <div class="p-col-12 p-md-10">
+    </div>
+    <div class="row row-cols-3">
+        <div >
+            <label for="sugars" [class]="">{{'INGREDIENT_EDIT.SUGARS' | translate}}</label>
+            <div class="">
                 <input id="sugars" type="number" pInputText formControlName="sugars">
             </div>
         </div>
-        <div class="p-field p-grid">
-            <label for="fats" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.FATS' | translate}}</label>
-            <div class="p-col-12 p-md-10">
+        <div >
+            <label for="fats" [class]="">{{'INGREDIENT_EDIT.FATS' | translate}}</label>
+            <div class="">
                 <input id="fats" type="number" pInputText formControlName="fats">
             </div>
         </div>
-        <div class="p-field p-grid">
-            <label for="sml" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.SML' | translate}}</label>
-            <div class="p-col-12 p-md-10">
+        <div >
+            <label for="sml" [class]="">{{'INGREDIENT_EDIT.SML' | translate}}</label>
+            <div class="">
                 <input id="sml" type="number" pInputText formControlName="sml">
             </div>
         </div>
-        <div class="p-field p-grid">
-            <label for="otherSolids" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.OTHER' | translate}}</label>
-            <div class="p-col-12 p-md-10">
+    </div>
+        
+        
+    <div class="row row-cols-3">
+        <div class="">
+            <label for="otherSolids" [class]="">{{'INGREDIENT_EDIT.OTHER' | translate}}</label>
+            <div class="">
                 <input id="otherSolids" type="number" pInputText formControlName="otherSolids">
             </div>
         </div>
-        <div class="p-field p-grid">
-            <label for="totSolids" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.TOT' | translate}}</label>
-            <div class="p-col-12 p-md-10">
+        <div class="">
+            <label for="totSolids" [class]="">{{'INGREDIENT_EDIT.TOT' | translate}}</label>
+            <div class="">
                 <input id="totSolids" type="string" pInputText [value]="totSolids" [disabled]=true>
             </div>
         </div>
-        <div class="p-field p-grid">
-            <label for="water" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.WATER' | translate}}</label>
-            <div class="p-col-12 p-md-10">
+        <div class="">
+            <label for="water" [class]="">{{'INGREDIENT_EDIT.WATER' | translate}}</label>
+            <div class="">
                 <input id="water" type="string" pInputText [disabled]="true" [value]="water">
             </div>
         </div>
-        <div class="p-field p-grid">
-            <label for="pac" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.PAC' | translate}}</label>
-            <div class="p-col-12 p-md-10">
+    </div>
+    <div class="row row-cols-3">
+        <div class="">
+            <label for="pac" [class]="">{{'INGREDIENT_EDIT.PAC' | translate}}</label>
+            <div class="">
                 <input id="pac" type="number" pInputText formControlName="pac">
             </div>
         </div>
-        <div class="p-field p-grid">
-            <label for="pod" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.POD' | translate}}</label>
-            <div class="p-col-12 p-md-10">
+        <div class="">
+            <label for="pod" [class]="">{{'INGREDIENT_EDIT.POD' | translate}}</label>
+            <div class="">
                 <input id="pod" type="number" pInputText formControlName="pod">
             </div>
         </div>
-        <div class="p-field p-grid">
-            <label for="cost" [class]="getLabelClasses()">{{'INGREDIENT_EDIT.COST' | translate}}</label>
-            <div class="p-col-12 p-md-10">
+        <div class="">
+            <label for="cost" [class]="">{{'INGREDIENT_EDIT.COST' | translate}}</label>
+            <div class="">
                 <input id="cost" type="number" pInputText formControlName="cost">
             </div>
         </div>
-        <div class="p-field p-grid">
-            <p-button class="p-p-10" icon="pi pi-save" iconPos="left" (click)="save($event)"
+    </div>
+    <div class="row p-2 justify-content-end">
+        <div class="col-3">
+            <div class="row row-cols-2">
+                <p-button class="p-1" icon="pi pi-save" iconPos="left" (click)="save($event)"
                 [disabled]="!ingredientForm.valid || !ingredientForm.dirty" label="Save">
             </p-button>
-            <p-button class="p-p-10" icon="pi pi-times" iconPos="left" label="Delete"></p-button>
+            <p-button class="p-1" icon="pi pi-times" iconPos="left" label="Delete"></p-button>
             <p-confirmPopup></p-confirmPopup>
+            </div>
         </div>
     </div>
 </form>
