@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { exhaustMap, map, switchMap } from 'rxjs/operators';
-import { RecipeDTO } from 'src/app/shared/dto/recipeDTO.model';
-import { environment } from 'src/environments/environment';
 import * as RecipesActions from './recipes.action';
+import { RecipeDTO } from '../../shared/dto/recipeDTO.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class RecipesEffects {
@@ -15,7 +15,7 @@ export class RecipesEffects {
         switchMap(() => {
             console.log('fetch dto list');
             return this.http.get<RecipeDTO[]>(
-                environment.baseUrl + '/recipe/listDTO'
+                environment.baseUrl + 'recipe/listDTO'
             ).pipe(
                 map(recipes => {
                     console.log('set recipe dto list action');
@@ -45,7 +45,7 @@ export class RecipesEffects {
         exhaustMap((action) => {
             console.log('updating recipe: ', action.recipe);
             return this.http.put<RecipeDTO>(
-                'http://localhost:8080/recipe/', action.recipe
+                environment.baseUrl + 'recipe/', action.recipe
             ).pipe(
                 map(recipe => {
                     console.log('updated recipe:', recipe);

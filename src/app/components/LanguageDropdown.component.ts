@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { LangService } from '../shared/lang.service';
+import { NgIf } from '@angular/common';
+import { SharedModule } from 'primeng/api';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
-  selector: 'app-language-dropdown',
-  template: `
+    selector: 'app-language-dropdown',
+    template: `
     <p-dropdown
       [options]="countries"
       [(ngModel)]="selectedCountry"
       optionLabel="name"
       (onChange)="onChange()"
+      dataKey="lang"
     >
       <ng-template pTemplate="selectedItem">
         <div class="d-flex flex-row" *ngIf="selectedCountry">
@@ -40,7 +45,15 @@ import { LangService } from '../shared/lang.service';
       </ng-template>
     </p-dropdown>
   `,
-  styles: [''],
+    styles: [''],
+    standalone: true,
+    imports: [
+        DropdownModule,
+        ReactiveFormsModule,
+        FormsModule,
+        SharedModule,
+        NgIf,
+    ],
 })
 export class LanguageDropdownComponent implements OnInit {
   selectedCountry: Country;
@@ -53,7 +66,12 @@ export class LanguageDropdownComponent implements OnInit {
       { name: 'United Kingdom', code: 'GB', lang: 'en' },
     ];
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    let c:string = this.langService.getCurrentLanguageCode();
+    this.countries.forEach(x => {
+      if(x.lang = c)this.selectedCountry = x;
+    });
+  }
 
   onChange(): void {
     this.langService.changeLanguage(this.selectedCountry.lang);

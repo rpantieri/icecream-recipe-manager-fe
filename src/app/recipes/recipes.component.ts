@@ -1,15 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { RecipeDTO } from '../shared/dto/recipeDTO.model';
 import * as RecipeActions from './store/recipes.action';
 import { recipesFeature } from './store/recipes.reducer';
+import { ButtonModule } from 'primeng/button';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ListboxModule } from 'primeng/listbox';
 
 @Component({
-  selector: 'app-recipes',
-  templateUrl: './recipes.component.html',
-  styles: ['']
+    selector: 'app-recipes',
+    templateUrl: './recipes.component.html',
+    styles: [''],
+    standalone: true,
+    imports: [ListboxModule, ReactiveFormsModule, FormsModule, ButtonModule, RouterOutlet]
 })
 export class RecipesComponent implements OnInit,OnDestroy {
 

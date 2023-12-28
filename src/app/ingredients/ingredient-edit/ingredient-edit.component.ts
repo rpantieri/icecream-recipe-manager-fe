@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { ConfirmationService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { IngredientDTO } from 'src/app/shared/dto/ingredientDTO.model';
 import * as IngredientActions from '../store/ingredients.action';
 import { ingredientFeature } from '../store/ingredients.reducer';
-import { copyObject } from 'src/app/shared/utils';
+import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { IngredientDTO } from '../../shared/dto/ingredientDTO.model';
+import { copyObject } from '../../shared/utils';
 
 interface Item {
   name: string;
@@ -20,10 +24,12 @@ interface Item {
 }
 
 @Component({
-  selector: 'app-ingredient-edit',
-  templateUrl: './ingredient-edit.component.html',
-  styles: [''],
-  providers : [ConfirmationService]
+    selector: 'app-ingredient-edit',
+    templateUrl: './ingredient-edit.component.html',
+    styles: [''],
+    providers: [ConfirmationService],
+    standalone: true,
+    imports: [ReactiveFormsModule, InputTextModule, ButtonModule, ConfirmPopupModule, TranslateModule]
 })
 export class IngredientEditComponent implements OnInit {
 

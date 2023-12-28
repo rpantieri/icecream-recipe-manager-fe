@@ -1,6 +1,7 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { RecipeDTO } from 'src/app/shared/dto/recipeDTO.model';
+
 import * as RecipesAction from './recipes.action';
+import { RecipeDTO } from '../../shared/dto/recipeDTO.model';
 
 export const RECIPES_KEY = 'recipes';
 

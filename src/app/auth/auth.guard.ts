@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs/operators';
 import { authFeature} from './store/auth.reducer';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
+
 
 
 export const authGuard = () => {

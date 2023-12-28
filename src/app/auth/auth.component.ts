@@ -5,10 +5,13 @@ import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import * as AuthActions from './store/auth.action';
 import { authFeature } from './store/auth.reducer';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageDropdownComponent } from '../components/LanguageDropdown.component';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
-  selector: 'app-auth.component',
-  template: `
+    selector: 'app-auth.component',
+    template: `
     <div
       class="align-items-center d-flex h-100 justify-content-center w-auto"
     >
@@ -66,8 +69,14 @@ import { authFeature } from './store/auth.reducer';
       </div>
     </div>
   `,
-  styles: [''],
-  providers: [MessageService],
+    styles: [''],
+    providers: [MessageService],
+    standalone: true,
+    imports: [
+        InputTextModule,
+        LanguageDropdownComponent,
+        TranslateModule,
+    ],
 })
 export class AuthComponent implements OnInit, OnDestroy {
   subscription: Subscription | undefined;

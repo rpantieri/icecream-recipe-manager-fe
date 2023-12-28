@@ -1,6 +1,7 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import * as AuthAction from './auth.action';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
+
 
 export const AUTH_KEY = 'auth';
 

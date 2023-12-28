@@ -5,10 +5,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
-import { LoginDTO } from 'src/app/shared/dto/logintDTO.model';
-import { ResponseMessage } from 'src/app/shared/dto/response-message.model';
-import { environment } from 'src/environments/environment';
 import * as AuthAction from './auth.action';
+import { LoginDTO } from '../../shared/dto/logintDTO.model';
+import { environment } from '../../../environments/environment';
+import { ResponseMessage } from '../../shared/dto/response-message.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthEffects {

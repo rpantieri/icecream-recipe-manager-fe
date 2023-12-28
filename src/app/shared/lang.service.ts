@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,10 @@ export class LangService {
   ) {
     this.langs = environment.availableLang.split(',');
     this.defLag = environment.defaultLang;
+  }
+
+  public getCurrentLanguageCode(): string{
+    return this.tService.currentLang;
   }
 
   public initTranslationServices(): void {

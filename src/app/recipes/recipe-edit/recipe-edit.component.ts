@@ -1,14 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, SharedModule } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { IngredientDTO } from 'src/app/shared/dto/ingredientDTO.model';
-import { RecipeDTO } from 'src/app/shared/dto/recipeDTO.model';
-import { RecipeIngredientDTO } from 'src/app/shared/dto/recipeIngredientDTO.model';
+
 import * as RecipesActions from '../store/recipes.action';
-import { ingredientFeature } from 'src/app/ingredients/store/ingredients.reducer';
-import { recipesFeature } from 'src/app/recipes/store/recipes.reducer';
-import { copyObject } from 'src/app/shared/utils';
+
+import { TranslateModule } from '@ngx-translate/core';
+import { DecimalPipe } from '@angular/common';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { DropdownModule } from 'primeng/dropdown';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { IngredientDTO } from '../../shared/dto/ingredientDTO.model';
+import { ingredientFeature } from '../../ingredients/store/ingredients.reducer';
+import { copyObject } from '../../shared/utils';
+import { recipesFeature } from '../store/recipes.reducer';
+import { RecipeDTO } from '../../shared/dto/recipeDTO.model';
+import { RecipeIngredientDTO } from '../../shared/dto/recipeIngredientDTO.model';
 
 
 interface RowItem {
@@ -31,11 +40,12 @@ interface Total {
 }
 
 @Component({
-  selector: 'app-recipe-edit',
-  templateUrl: './recipe-edit.component.html',
-  styles: [
-  ],
-  providers : [ConfirmationService]
+    selector: 'app-recipe-edit',
+    templateUrl: './recipe-edit.component.html',
+    styles: [],
+    providers: [ConfirmationService],
+    standalone: true,
+    imports: [ReactiveFormsModule, FormsModule, TableModule, SharedModule, ButtonModule, DropdownModule, ConfirmPopupModule, DecimalPipe, TranslateModule]
 })
 export class RecipeEditComponent implements OnInit, OnDestroy {
 

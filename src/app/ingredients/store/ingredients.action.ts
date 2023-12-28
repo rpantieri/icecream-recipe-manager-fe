@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { IngredientDTO } from 'src/app/shared/dto/ingredientDTO.model';
+import { IngredientDTO } from '../../shared/dto/ingredientDTO.model';
+
 
 
 export const FETCH_DTO_LIST = createAction(

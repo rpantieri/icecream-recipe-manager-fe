@@ -1,14 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { MessageService } from 'primeng/api';
+import { MessageService, SharedModule } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import * as AuthActions from './store/auth.action';
 import { authFeature } from './store/auth.reducer';
 import { Nullable } from 'primeng/ts-helpers';
+import { TranslateModule } from '@ngx-translate/core';
+import { ToastModule } from 'primeng/toast';
+import { LanguageDropdownComponent } from '../components/LanguageDropdown.component';
+import { ButtonModule } from 'primeng/button';
+import { DividerModule } from 'primeng/divider';
+import { PasswordModule } from 'primeng/password';
+import { InputTextModule } from 'primeng/inputtext';
+import { NgIf } from '@angular/common';
 @Component({
-  selector: 'app-auth.component',
-  template: `
+    selector: 'app-auth.component',
+    template: `
     <div
       class="flex flex-row w-full h-full  bg-center bg-blue-100 align-items-center justify-content-center"
       style="background-image: url('./assets/images/icecream-background.png');"
@@ -100,8 +108,20 @@ import { Nullable } from 'primeng/ts-helpers';
 
     <p-toast position="center"></p-toast>
   `,
-  styles: [''],
-  providers: [MessageService],
+    styles: [''],
+    providers: [MessageService],
+    standalone: true,
+    imports: [
+        NgIf,
+        InputTextModule,
+        PasswordModule,
+        SharedModule,
+        DividerModule,
+        ButtonModule,
+        LanguageDropdownComponent,
+        ToastModule,
+        TranslateModule,
+    ],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   constructor(

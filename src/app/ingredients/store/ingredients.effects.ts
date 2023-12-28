@@ -4,8 +4,9 @@ import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, map, exhaustMap } from 'rxjs/operators';
 import * as IngredientActions from './ingredients.action';
-import { IngredientDTO } from 'src/app/shared/dto/ingredientDTO.model';
-import { environment } from 'src/environments/environment';
+import { IngredientDTO } from '../../shared/dto/ingredientDTO.model';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({ providedIn: 'root' })
 export class IngredientsEffects {

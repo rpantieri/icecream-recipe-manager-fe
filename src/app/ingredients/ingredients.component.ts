@@ -1,16 +1,19 @@
 import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IngredientDTO } from '../shared/dto/ingredientDTO.model';
 import * as IngredientActions from './store/ingredients.action';
 import { ingredientFeature } from './store/ingredients.reducer';
-import { NgModel } from '@angular/forms';
-import { Listbox } from 'primeng/listbox';
+import { NgModel, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Listbox, ListboxModule } from 'primeng/listbox';
+import { ButtonModule } from 'primeng/button';
 @Component({
-  selector: 'app-ingredients',
-  templateUrl: './ingredients.component.html',
-  styles: ['.customListStyleClass {height : 100%;}']
+    selector: 'app-ingredients',
+    templateUrl: './ingredients.component.html',
+    styles: ['.customListStyleClass {height : 100%;}'],
+    standalone: true,
+    imports: [ListboxModule, ReactiveFormsModule, FormsModule, ButtonModule, RouterOutlet]
 })
 export class IngredientsComponent implements OnInit, OnDestroy {
 
